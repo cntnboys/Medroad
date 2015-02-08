@@ -1,0 +1,9 @@
+<resources>
+
+    <string name="title_activity_sensor_read_preference">ECG Tester Settings</string>
+
+    <!-- Strings related to Settings -->
+
+	<string name="header_category_bluetooth_devices">Bluetooth Sensor Devices</string>
+
+</resources>

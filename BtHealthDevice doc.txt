@@ -1,0 +1,56 @@
+/******************************
+ *  BtHealthDevice class
+ *  enables operations with a bluetooth device 
+ *  connects to the bluetooth device in another thread, reads from it in another thread
+ *  
+ *  Usage: btObject = new BtHealthDevice(BluetoothDevice device, Handler handler);
+ *  	device is the bluetooth device to control
+ *  	handler is the message handler for the device (requirements discussed later) 
+ *  
+ *  Methods to control the device:
+ *  
+ *  NOTE:  you will not get results back immediately from your call. Your handler must
+ *  wait for the results
+ *  	setWait(int ms)  set a wait time (in milliseconds) before connecting when 
+ *  		connect is called. This means that successive attempts are not made too quickly
+ *  		(the wait is on this thread, not UI) Don't forget to reset it to 0 if you set it.
+ *  	connect(int successflag, int nosuccessflag, String uuid);   to connect to it
+ *          uuid is optional and is the uuid to connect with (defaults to general)
+ *          successflag is the flag to use for the handler if the connection is
+ *  		successful, and nosuccessflag is the one to use if it isn't. Both are optional
+ *  	disconnect();   to disconnect from it
+ *  
+ *  	getData();  to get data items on the device. Continues until there is an error 
+ *  			or stopData() is called.
+ *  	stopData(); stops getting data
+ *  
+ *  	cleanup(); cleans up any open iostreams and sockets
+ * 
+ *  Make sure you call disconnect() to clean things up after connecting, or call cleanup();
+ * 
+ *  Your handler must handle the following messages:
+ * 	    successflag if the connection succeeds (for connect)
+ * 				returns the bluetooth device as the message object
+ * 		nosuccessflag if the connection fails (for connect)
+ * 				returns the bluetooth device as the message object
+ *      BtHealthDevice.CONNECTED_BT if the connection succeeds and no successflag is given
+ * 				returns the bluetooth device as the message object
+ *      BtHealthDevice.CANNOT_CONNECT_BT  if the connection fails and no nosuccessflag is given
+ * 				returns the bluetooth device as the message object
+ * 		BtHealthDevice.GET_DATA for EACH data packet received. 
+ *  			The object returned is a byte buffer with arg1 being the length
+ *  	BtHealthDevice.STOP_DATA if something other than a call to stopData() makes it stop reading
+ * 
+ * 
+ *  A typical session might look like this:
+ *  	btHealthDevice = new BtHealthDevice(device, handler);
+ *  	btHealthDevice.setWait(5000);  // if making successive connection attempts
+ *  	btHealthDevice.connect(success, nosuccess);
+ *  		after handler notices success then
+ *  	btHealthDevice.getData();
+ *  		handler handles data
+ *  	btHealthDevice.stopRead();
+ *  		could be more start and stops here
+ *  	btHealthDevice.disconnect();
+ *  	btHealthDevice.cleanup();
+ */

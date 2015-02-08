@@ -1,0 +1,101 @@
+<!--<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.ecgtester.MainActivity"
+    tools:ignore="MergeRootFrame" />
+ -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.example.medroad.MainActivity$PlaceholderFragment" >
+
+    <LinearLayout
+        android:id="@+id/mainLinearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+        
+ 		<Button
+            android:id="@+id/connectButton"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="ecgConnect"
+            android:text="@string/connect" />
+ 	 
+ 		 <LinearLayout
+        	android:id="@+id/nameLinearLayout"
+        	android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+        	android:orientation="horizontal" >
+        	
+        	<TextView
+            	android:id="@+id/ecgNameTextView"
+            	android:layout_width="wrap_content"
+            	android:layout_height="wrap_content" />
+        	</LinearLayout>
+
+        <LinearLayout
+        	android:id="@+id/pulseLinearLayout"
+        	android:layout_width="wrap_content"
+       		android:layout_height="wrap_content" 
+        	android:layout_weight="1">
+         
+       		 <TextView
+            	android:id="@+id/pulseLabelTextView"
+            	android:layout_width="wrap_content"
+           		android:layout_height="wrap_content"
+            	android:text="@string/pulse_label" />
+
+        	<TextView
+        	    android:id="@+id/pulseDataTextView"
+        	    android:layout_width="wrap_content"
+        	    android:layout_height="wrap_content"
+        	    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    		</LinearLayout>
+    
+       
+
+    </LinearLayout>
+
+    
+  
+ 	 <com.androidplot.xy.XYPlot
+            android:id="@+id/ecgPlot"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            androidPlot.title="ECG (2 seconds)"
+            androidPlot.domainLabel=""
+            androidPlot.rangeLabel="muV"
+            androidPlot.titleWidget.labelPaint.textSize="@dimen/title_font_size"
+            androidPlot.domainLabelWidget.labelPaint.textSize="@dimen/domain_label_font_size"
+            androidPlot.rangeLabelWidget.labelPaint.textSize="@dimen/range_label_font_size"
+            androidPlot.graphWidget.marginTop="10dp"
+            androidPlot.graphWidget.marginLeft="15dp"
+            androidPlot.graphWidget.marginBottom="10dp"
+            androidPlot.graphWidget.marginRight="10dp"
+            androidPlot.graphWidget.rangeLabelPaint.textSize="@dimen/range_tick_label_font_size"
+            androidPlot.graphWidget.rangeOriginLabelPaint.textSize="@dimen/range_tick_label_font_size"
+            androidPlot.graphWidget.domainLabelPaint.textSize="@dimen/domain_tick_label_font_size"
+            androidPlot.graphWidget.domainOriginLabelPaint.textSize="@dimen/domain_tick_label_font_size"
+            androidPlot.legendWidget.textPaint.textSize="@dimen/legend_text_font_size"
+            androidPlot.legendWidget.iconSizeMetrics.heightMetric.value="10dp"
+            androidPlot.legendWidget.iconSizeMetrics.widthMetric.value="10dp"
+            androidPlot.legendWidget.heightMetric.value="15dp"
+            androidPlot.legendWidget.positionMetrics.anchor="right_bottom"
+            androidPlot.graphWidget.gridLinePaint.color="#000000"/>
+	
+
+</LinearLayout>

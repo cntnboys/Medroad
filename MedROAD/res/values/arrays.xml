@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="signalResolution">
+        <item name="020">0.20 muV/count</item>
+        <item name="100">1.00 muV/count (default)</item>
+    </string-array>
+     
+    <string-array name="signalResolutionValues">
+        <item name="020">020</item>
+        <item name="100">100</item>
+    </string-array>
+    
+    <string-array name="highPassFilter">
+        <item name="1">1 Hz (default)</item>
+        <item name="10">10 Hz</item>
+    </string-array>
+     
+    <string-array name="highPassFilterValues">
+        <item name="1">1</item>
+        <item name="10">10</item>
+    </string-array>
+  
+    <string-array name="samplingFrequency">
+        <item name="1000">1000 Hz</item>
+        <item name="500">500 Hz</item>
+        <item name="250">250 Hz</item>
+        <item name="125">125 Hz</item>
+        <item name="100">100 Hz (default)</item>
+    </string-array>
+     
+    <string-array name="samplingFrequencyValues">
+        <item name="1000">1000</item>
+        <item name="500">500</item>
+        <item name="250">250</item>
+        <item name="125">125</item>
+        <item name="100">100</item>
+    </string-array>
+    
+     <string-array name="yRange">
+        <item name="6000">6000 microV</item>
+        <item name="5000">5000 microV</item>
+        <item name="4000">4000 microV</item>
+        <item name="3000">3000 microV</item>
+        <item name="2500">2500 microV</item>
+        <item name="2000">2000 microV</item>
+        <item name="1500">1500 microV</item>
+        <item name="1000">1000 microV</item>
+        <item name="500">500 microV</item>
+    </string-array>
+     
+    <string-array name="yRangeValues">
+        <item name="6000">6000</item>
+        <item name="5000">5000</item>
+        <item name="4000">4000</item>
+        <item name="3000">3000</item>
+        <item name="2500">2500</item>
+        <item name="2000">2000</item>
+        <item name="1500">1500</item>
+        <item name="1000">1000</item>
+        <item name="500">500</item>
+    </string-array>
+  
+</resources>

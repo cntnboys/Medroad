@@ -1,0 +1,85 @@
+/******************************
+ *  ForaBpGlucose class
+ *  enables operations with a Fora BP and Glucose device through bluetooth
+ *  connects to the bluetooth device in another thread, reads from it in another thread
+ *  
+ *  Usage: foraObject = new ForaBpGlucose(BluetoothDevice device, Handler handler);
+ *  	device is the bluetooth device to control
+ *  	handler is the message handler for the device (requirements discussed later) 
+ *  
+ *  Methods to control the device:
+ *  
+ *  NOTE:  you will not get results back immediately from your call. Your handler must
+ *  wait for the results
+ *  	
+ *  	setWait(int ms)  set a wait time (in milliseconds) before connecting when 
+ *  		connect is called. This means that successive attempts are not made too quickly
+ *  		(the wait is on this thread, not UI) Don't forget to reset it to 0 if you set it.
+ *  	connect(int successflag, int nosuccessflag);   to connect to it. 
+ *  		successflag is the flag to use for the handler if the connection is
+ *  		successful, and nosuccessflag is the one to use if it isn't. Both are optional
+ *  	disconnect();   to disconnect from it
+ *  
+ *      
+ *  	getSerial();  to get the serial number
+ *  	getProject();  to get the project number
+ *  	getTime();  to get the device time
+ *  	setTime();  to set the device time to the current time
+ *  		
+ *  	checkForData();  to get the number of data items on the device
+ *  	getData();  to get all of data items on the device
+ *  	readClearTurnOff();  to get the latest reading, clear the data and turn off device
+ *  	getLatestData();  to get the latest data item on the device (returns FORA_GET_LATEST_DATA to handler)
+ *  	clearData();  to clear all the data off the device
+ *  		
+ *  	turnOffDevice();  to turn the device off
+ *  
+ *  	cleanup(); cleans up any open iostreams and sockets
+ * 
+ *  
+ *  Make sure you call disconnect() to clean things up after connecting, or call cleanup();
+ * 
+ * *  Your handler must handle the following messages:
+ * 	    successflag if the connection succeeds (for connect)
+ * 				returns the bluetooth device as the message object
+ * 		nosuccessflag if the connection fails (for connect)
+ * 				returns the bluetooth device as the message object
+ *      ForaBpGlucose.CONNECTED_BT if the connection succeeds and no successflag is given
+ * 				returns the bluetooth device as the message object
+ *      ForaBpGlucose.CANNOT_CONNECT_BT  if the connection fails and no nosuccessflag is given
+ * 				returns the bluetooth device as the message object
+ * 		ForaBpGlucose.FORA_GET_ALL_DATA for EACH data item found
+ *      ForaBpGlucose.FORA_GET_LATEST_DATA for the data item found
+ *  			Both FORA_GET_ALL_DATA and FORA_GET_LATEST_DATA return a ForaBpGlucose.ForaData object
+ *  			with methods:
+ *  				TypeOfReading()  ForaBpGlucose.BLOOD_PRESSURE or ForaBpGlucose.BLOOD_GLUCOSE
+ *  				getDataString() returns a string with the time and reading
+ *  				getTimeStamp() returns a string with the time stamp yyyy-mm-dd hh:mm:ss
+ *  				getGlucose() returns the glucose reading in mg/dL
+ *  				getSystolic() returns the systolic part of blood pressure
+ *  				getDiastolic()  returns the diastolic part of blood pressure
+ *  				getPulse()  returns the pulse
+ *  		Note that this data object may be null for getLatestData or readClearTurnOff
+ *  	ForaBpGlucose.NO_RESPONSE  if there is no response when expected 
+ *   			the first argument is the operation this was for (FORA_GET_SERIAL etc)
+ *      ForaBpGlucose.CHECKSUM_ERROR if there is a checksum error on a read
+ *      ForaBpGlucose.FORA_GET_SERIAL, the object returned is a byte array with 8 bytes
+ *      ForaBpGlucose.FORA_CLEAR_DATA - no object. Acknowledgement 
+ *      ForaBpGlucose.FORA_TURN_OFF_DEVICE - no object. Acknowledgement 
+ *      ForaBpGlucose.CHECK_FOR_DATA, the arg1 value is the number of data (response from checkForData)
+ *      ForaBpGlucose.FORA_SET_TIME, the object is a date/time string. Acknowledges change
+ *      ForaBpGlucose.FORA_GET_TIME, the object is a date/time string
+ *      ForaBpGlucose.FORA_GET_PROJECT, the object is a byte array with 2 bytes
+ *  
+ *  *  A typical session might look like this:
+ *  	forBpGlucose = new ForaBpGlucose(device, handler);
+ *  	forBpGlucose.setWait(5000);  // if making successive connection attempts
+ *  	forBpGlucose.connect(success, nosuccess);
+ *  		after handler notices success then
+ *  	forBpGlucose.readClearTurnOff();
+ *  		handler handles data
+ *  	forBpGlucose.cleanup();
+ *  
+ *  
+ *  inherits a few flags and variables from parent BtHealthDevice, but all subclasses and methods are redone
+ */

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+<basefont size="6dp">
+</head>
+
+<body>
+<h1>Help for MedROAD</h1>
+
+<p>This app reads an ECG device and displays a heart rhythm strip. The name of the device and current parameters are shown at the top of the screen. 
+There may be a delay when it starts reading.
+Optionally it will also save the data into a file.
+
+<h1>Operation:</h1>
+
+
+<p>Go into <em>Settings</em> (from the menu) and set up the device and parameters to be used.
+
+<p>Press <strong>Start</strong> to connect to the ecg device and start sending to the main driver. If it won't connect, a message will be displayed.
+
+<p>Press <strong>Stop/Idle</strong> to stop reading and disconnect from the device. The device will remain on so that you can connect to it again without having to power it on.
+
+
+<h2>Settings:</h2>
+  
+<p><strong>ECG Device Name:</strong> Click on this to be given a choice of paired devices. 
+The ECG devices are named AATOS-xxx, where xxx is some number.
+ 
+<h3>ECG Parameters:</h3>
+
+<p><strong>ECG Signal Resolution:</strong> 0.2 or 1.0 muV/count. The default 1.0.
+
+<p><strong>ECG High Pass Filter:</strong> 1 or 10 MHz. The default is 1 Hz. 
+
+<p><strong>ECG Sampling Frequency:</strong> 100, 125, 250, 500 or 1000 Hz. The default is 100 Hz. 
+This is the number of data points in a second that the ecg device uses.
+
+<h3><strong>Plot parameters:</strong></h3> 
+<p><strong>Y range for plot</strong> is the range (positive and negative) for graph display. This may need to be set for each person, but should not need to be changed otherwise. Working on a better solution ...
+
+<h3>Save to File</h3>
+<p><strong>Save to File</strong>: optionally the data can be saved to a csv file. Turn ON to save.
+
+<p><strong>File to save ecg data in</strong>: click this to set up the filename. File will be saved under Download in the phone
+
+
+
+</body>
+</html>
+
+

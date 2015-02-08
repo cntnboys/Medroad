@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+  xmlns:android="http://schemas.android.com/apk/res/android">
+ 
+  	<ListPreference
+   		android:key="PREF_ECG_NAME"
+   		android:title="ECG Device Name"
+   		android:summary="Name of ECG Device"
+   		android:dialogTitle="ECG Device"
+   		android:defaultValue="Press to set"
+  	/>
+  	
+ <PreferenceCategory android:title="ECG Parameters">
+     <ListPreference
+  	 	android:key="PREF_SIGNAL_RESOLUTION"
+   		android:title="ECG Signal Resolution (SR)"
+   		android:summary="ECG Signal resolution muV/count"
+   		android:entries="@array/signalResolution"
+   		android:entryValues="@array/signalResolutionValues"
+   		android:dialogTitle="ECG Signal Resolution"
+   		android:defaultValue="100"
+  		/>
+      <ListPreference
+  	 	android:key="PREF_HIGH_PASS_FILTER"
+   		android:title="ECG High Pass Filter (HPF)"
+   		android:summary="ECG High Pass Filter Hz"
+   		android:entries="@array/highPassFilter"
+   		android:entryValues="@array/highPassFilterValues"
+   		android:dialogTitle="ECG High Pass Filter"
+   		android:defaultValue="1"
+  		/>
+      <ListPreference
+  	 	android:key="PREF_SAMPLING_FREQUENCY"
+   		android:title="ECG Sampling Frequency (SF)"
+   		android:summary="ECG Sampling Frequency Hz"
+   		android:entries="@array/samplingFrequency"
+   		android:entryValues="@array/samplingFrequencyValues"
+   		android:dialogTitle="ECG Sampling Frequency"
+   		android:defaultValue="100"
+  		/>
+   	
+   </PreferenceCategory>
+   <PreferenceCategory android:title="Plot Parameters">
+     <ListPreference
+  	 	android:key="PREF_Y_RANGE"
+   		android:title="Y Range for plot"
+   		android:summary="R range"
+   		android:entries="@array/yRange"
+   		android:entryValues="@array/yRangeValues"
+   		android:dialogTitle="Y Range for plot"
+   		android:defaultValue="7000"
+  		/>
+      </PreferenceCategory>
+      
+ 	<PreferenceCategory android:title="Save to File">
+       	<SwitchPreference
+   			android:key="PREF_SAVE_FILE"
+   			android:title="Save to file?"
+   			android:summary="Flag indicating whether to save to file"
+  			android:dialogTitle="Save to file?"
+  			android:defaultValue="false"
+ 		/>
+   		<EditTextPreference
+ 			android:key="PREF_FILE_NAME"
+			android:title="File to save ecg data in"
+			android:summary="File to save ecg data in"
+ 			android:dialogTitle="Filename"
+			android:dialogMessage="File to save ecg data in"   
+			android:defaultValue="ecg-data" 
+		/>
+   </PreferenceCategory>
+  	
+</PreferenceScreen>

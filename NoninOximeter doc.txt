@@ -1,0 +1,99 @@
+/******************************
+ *  NoninOximeter class
+ *  enables operations with a Nonin oximeter device through bluetooth
+ *  connects to the bluetooth device in another thread, reads from it in another thread
+ *  
+ *  Usage: oxObject = new NoninOximeter(BluetoothDevice device, Handler handler, boolean wrist);
+ *  	Device is the bluetooth device (obtained from the paired list)
+ *  	Handler is the message handler for the device (requirements discussed later)
+ *  	wrist indicates whether this is a wrist oximeter (model 3150) or not
+ *  		(it is optional and defaults to false)
+ *  Methods to control the device:
+ *  
+ *  NOTE:  you will not get results back immediately from your call. Your handler must
+ *  wait for the results
+ *  	setWait(int ms)  set a wait time (in milliseconds) before connecting when 
+ *  		connect is called. This means that successive attempts are not made too quickly
+ *  		(the wait is on this thread, not UI) Don't forget to reset it to 0 if you set it.
+ *  	connect(int successflag, int nosuccessflag, String uuid);   to connect to it
+ *          uuid is optional and is the uuid to connect with (defaults to general)
+ *          successflag is the flag to use for the handler if the connection is
+ *  		successful, and nosuccessflag is the one to use if it isn't. Both are optional
+ *  	disconnect();   to disconnect from it
+ *  
+ *  	setData8(); sets the format the device uses to format 8 - continuous 4 byte data
+ *  	setData13(); sets the format the device uses to format 13 - spot check
+ *  	setData2(); sets the format the device uses to format 2 - continuous 5 byte data
+ *  		currently not handled in the data interpreter here so don`t use it :)
+ *  	getData();  to get data items on the device. Continues until there is an error 
+ *  			or stopData() is called.
+ *  	stopData(); stops getting data
+ *  
+ *  	cleanup(); cleans up any open iostreams and sockets
+ *  
+ *  	getTime() gets the current time setting on the device
+ *  	setTime() sets the time on the device to current time
+ *  	getSerial() gets the device serial number
+ *  	getModel() gets the device model number
+ *  		DO NOT call this for the 9560! It only works on the 3150
+ *  
+ * 
+ *  Make sure you call disconnect() to clean things up after connecting, or call cleanup();
+ * 
+ *  Your handler must handle the following messages:
+ * 	    successflag if the connection succeeds (for connect)
+ * 				returns the bluetooth device as the message object
+ * 		nosuccessflag if the connection fails (for connect)
+ * 				returns the bluetooth device as the message object
+ *      NoninOximeter.CONNECTED_BT if the connection succeeds and no successflag is given
+ * 				returns the bluetooth device as the message object
+ *      NoninOximeter.CANNOT_CONNECT_BT  if the connection fails and no nosuccessflag is given
+ * 				returns the bluetooth device as the message object
+ * 		NoninOximeter.GET_DATA for EACH data packet received
+ *  			The object returned is a NoninOximeter.NoninData object
+ *  			with methods:
+ *  				dataFormat()  8 or 13
+ *  				getPulse() returns the pulse (int)
+ *  				getSpO2() returns the SpO2 reading (int)
+ *  				getTimeStamp() returns a string with the time stamp yyyy-mm-dd hh:mm:ss
+ *  					(only available for format 13)
+ *  			Note that this object may be null  
+ *  	NoninOximeter.STOP_DATA if something other than a call to stopData() makes it stop reading
+ *  	NoninOximeter.NO_RESPONSE  if there is no response when expected 
+ *   			the first argument is the operation this was for (FORA_GET_SERIAL etc)
+ *   	NoninOximeter.NONIN_REDO_MEASUREMENT - measurement is not current - from memory. Redo
+ *  	NoninOximeter.NONIN_BATTERY_LOW - the battery is low and should be replaced
+ * 		NoninOximeter.NONIN_SENSOR_INACCURATE - the sensor needs to be repositioned
+ * 		NoninOximeter.FORA_GET_TIME, the object is a date/time string
+ * 		NoninOximeter.FORA_SET_TIME, the object is a date/time string. Acknowledges the change
+ * 		NoninOximeter.FORA_SET_FORMAT_8 as acknowledgement of change 
+ * 			Don`t rely on it doing this! There are issues sometimes. Assume the change worked when you request it
+ *  	NoninOximeter.FORA_SET_FORMAT_13 as acknowledgement
+ *  		Don`t rely on it doing this! There are issues sometimes. Assume the change worked when you request it
+ * 
+ * 
+ *  A typical session might look like this:
+ *  	noninOximeter = new NoninOximeter(device, handler);
+ *  	noninOximeter.setWait(5000);  // if making successive connection attempts
+ *  	noninOximeter.connect(success, nosuccess);
+ *  		after handler notices success then
+ *  	noninOximeter.setData8();  
+ *  	noninOximeter.getData();
+ *  		handler handles data
+ *  	noninOximeter.stopRead();
+ *  		could be more start and stops here
+ *  	noninOximeter.disconnect();
+ *  	noninOximeter.cleanup();
+
+ * 
+ *   This part is not working yet ...
+ *  	You can connect in other ways - if you use listenUsingRfcommWithServiceRecord you can
+ *  		take the socket received, build the NoninOximeter object (use getRemoteDevice() for the device)
+ *  		and then do:
+ *  	setNoninSocket(BluetoothSocket socket); 
+ *        	and then do getData()
+ *        Note that the oximeter will only trigger the listener when it has a data format 13 reading 
+ *  
+ *  
+ * 
+ */

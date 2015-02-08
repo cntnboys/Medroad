@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">MedROAD</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_help">Help</string>
+    <string name="connect">Connect</string>
+    <string name="disconnect">Disconnect</string>
+    <string name="signal_resolution_label">Signal Resolution:</string>
+    <string name="sigres_020">0.20 muV/count</string>
+    <string name="sigres_100">1.00 muV/count</string>
+    <string name="hpf_label">High Pass Filter:</string>
+    <string name="hpf_1">1 Hz</string>
+    <string name="hpf_10">10 Hz</string>
+    <string name="none">None</string>
+    <string name="start">Start Reading</string>
+    <string name="stop_idle">Stop/Idle</string>
+    <string name="stop_turn_off">Stop/Turn Off</string>
+    <string name="hr_label">Pulse:</string>
+    <string name="cannot_write">Cannot write to file</string>
+    <string name="OK">OK</string>
+    <string name="pulse_label">Pulse:</string>
+
+</resources>

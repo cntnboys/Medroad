@@ -1,0 +1,97 @@
+/******************************
+ *  EmotionEcg class
+ *  enables operations with an Emotion ECG device through bluetooth
+ *  connects to the bluetooth device in a separate thread, reads from it in another thread
+ *  Optionally will call an external method to handle the data within this thread
+ *  
+ *  Usage: ecgObject = new EmotionEcg(BluetoothDevice device, Handler handler, Method sampleMethod, Object object);
+ *  		Device is the bluetooth device (obtained from the paired list)
+ *  		Handler is the message handler for the device (requirements discussed later)
+ *  		If sampleMethod and object are specified, the method will be invoked on every packet
+ *  		SampleMethod should be declared as 
+ *  			public void sampleMethod(EmotionEcg.EcgData newdata) {  }
+ *  			(use getMethod to get the method)
+ *  			methods for getting the data out of this object are described further on
+ *  		And object should be the class object that the method is defined in (e.g. the activity)
+ *   OR
+ *  	ecgObject = new EmotionEcg(BluetoothDevice device, Handler handler);
+ *  		Then for each packet, a data object will be returned via the handler for you to deal with
+ *  
+ *  Methods to control the device:
+ *  
+ *  NOTE:  you will not get results back immediately from your call. Your handler must
+ *  wait for the results
+ *  
+ * 	For setting parameters: (these set it in the object but don't send to the device 
+ * 			until you do setupEcg or setupAndStartRead)
+ *  	setSignalResolution(int s)   20 is .2, 100 is 1.00  (default 1.00)
+ *  	setHighPassFilter(int s)	1 or 10			(default 1)
+ *  	setSamplingFrequency(int s) 100, 125, 250, 500 or 1000  (default 100)
+ *  
+ *  Connecting and Disconnecting:
+ *  	setWait(int ms)  set a wait time (in milliseconds) before connecting when 
+ *  		connect is called. This means that successive attempts are not made too quickly
+ *  		(the wait is on this thread, not UI) Don't forget to reset it to 0 if you set it.
+ *  	connect(int successflag, int nosuccessflag);   to connect to it
+ *  		successflag is the flag to use for the handler if the connection is
+ *  		successful, and nosuccessflag is the one to use if it isn't. Both are optional
+ *  	disconnect();   to disconnect from it
+ *  	stopAndIdle(); to stop reading and put into idle mode
+ *  	stopAndTurnOff(); to stop reading and turn off
+ *  
+ *  For reading the device:
+ *    	setupAndStartRead(); sets the parameters on the device and starts it sending data
+ *        (recommended) If you do separate setupEcg and getData requests, there may be timing issues 
+ *        and the parameters won't be set before the read starts
+ *        
+ *  	startReadFormat07();  to set the device format to format 0.7 and starts it sending data
+ *  	setupEcg(); sends the parameters on the device
+ *  	getData();  to get data items on the device. Continues until there is an error 
+ *  			or stopData() is called.
+ *
+ *  	stopData(); stops getting data. Leaves the device on in idle mode so it can be reconnected easily
+ *  
+ *  	cleanup(); cleans up any open iostreams and sockets (does not affect wifi socket)
+ *   Make sure you call disconnect() to clean things up after connecting, or call cleanup();
+ * 
+ *  Your handler must handle the following messages:
+ * 	    successflag if the connection succeeds (for connect)
+ * 				returns the bluetooth device as the message object
+ * 		nosuccessflag if the connection fails (for connect)
+ * 				returns the bluetooth device as the message object
+ *      EmotionEcg.CONNECTED_BT if the connection succeeds and no successflag is given
+ * 				returns the bluetooth device as the message object
+ *      EmotionEcg.CANNOT_CONNECT_BT  if the connection fails and no nosuccessflag is given
+ * 				returns the bluetooth device as the message object
+ * 		EmotionEcg.GET_DATA for EACH packet with an RR interval. 
+ *  			Returns pulse (averaged over 5 packets) as msg.arg1
+ *  	EmotionEcg.ECG_SAMPLES for EACH packet - only if the method and object have NOT been set 
+ *  			Returns an EmotionEcg.EcgData object as the object with methods:
+ *  				dataFormat()  returns the data format as a float (0.7 )
+ *  				getSamples() returns an int[25] of microvolt readings,
+ *  					which can be plotted against the sampling frequency (def 100Hz)
+ *  				getRrInterval() returns the rr interval in ms (int) 0 if there isn't one
+ *  				gotRrInterval() returns the true if there is an rr interval, false otherwise
+ *  				getPeak() returns the absolute time or RR peak in ms (int) 
+ *  				getPacketNumber() returns the packet number (int)
+ *  			Note that this object may be null  
+ *  	EmotionEcg.STOP_DATA if something other than a call to stopData() makes it stop reading
+ *      EmotionEcg.BATTERY_LOW - the battery is low and should be replaced
+ * 		EmotionEcg.SENSOR_INACCURATE - the sensor needs to be repositioned
+ * 
+ * 
+ * A typical session might look like this:
+ *  	emotionEcg = new EmotionEcg(device, handler, method, this);
+ *  	emotionEcg.setSignalResolution(100);  
+ *  	emotionEcg.setHighPassFilter(1);	
+ *  	emotionEcg.setSamplingFrequency(100);
+ *  	emotionEcg.setWait(5000);  // if making successive connection attempts
+ *  	emotionEcg.connect(success, nosuccess);
+ *  		after handler notices success then
+ *  	emotionEcg.setupAndStartRead();
+ *  		handler handles data, also sampleMethod will be called
+ *  	emotionEcg.stopRead();
+ *  		could be more start and stops here
+ *  	emotionEcg.disconnect();
+ *  	emotionEcg.cleanup();
+ */
