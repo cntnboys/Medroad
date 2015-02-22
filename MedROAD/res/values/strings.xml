@@ -21,5 +21,6 @@
     <string name="cannot_write">Cannot write to file</string>
     <string name="OK">OK</string>
     <string name="pulse_label">Pulse:</string>
+    <string name="title_activity_glucose">GlucoseActivity</string>
 
 </resources>

@@ -1,4 +1,4 @@
-/******************************
+F/******************************
  *  NoninOximeter class
  *  enables operations with a Nonin oximeter device through bluetooth
  *  connects to the bluetooth device in another thread, reads from it in another thread
